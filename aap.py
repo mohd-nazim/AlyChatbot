@@ -1,53 +1,45 @@
 import streamlit as st
-from datetime import datetime
 import requests
 
-# Initialize the app
-st.set_page_config(page_title='LLM Chatbot', layout='centered')
-st.title('💬 LLM Chatbot')
+# App Title
+st.title('Groq-Powered LLM Chatbot')
 
-# API Key input (you can replace this with a config file or env variable)
-api_key = st.text_input('Enter your Groq API Key:', type='password')
+# Initialize session state for conversation history
+if 'history' not in st.session_state:
+    st.session_state.history = []
 
-# Groq API URL
-api_url = 'https://api.groq.com/v1/chat/completion'
+# Input field for user message
+user_input = st.text_input('You:', placeholder='Type your message here...')
 
-# Maintain conversation history
-if 'messages' not in st.session_state:
-    st.session_state['messages'] = []
-
-# User input
-user_input = st.text_input('You:', placeholder='Type your message...')
+# Display the chat history
+for message in st.session_state.history:
+    if message['role'] == 'user':
+        st.write(f'You: {message["content"]}')
+    else:
+        st.write(f'Bot: {message["content"]}')
 
 # Send button logic
-if st.button('Send') and user_input:
-    # Store user message
-    st.session_state['messages'].append(('You', user_input))
-    
-    # Call Groq API
-    headers = {
-        'Authorization': f'Bearer {api_key}',
-        'Content-Type': 'application/json'
-    }
-    data = {
-        'messages': [{'role': 'user', 'content': user_input}]
-    }
+if st.button('Send'):
+    if user_input:
+        # Append user's message to history
+        st.session_state.history.append({'role': 'user', 'content': user_input})
 
-    try:
-        response = requests.post(api_url, headers=headers, json=data)
-        if response.status_code == 200:
-            bot_reply = response.json().get('choices')[0].get('message').get('content')
-        else:
-            bot_reply = f'Error: {response.status_code} - {response.text}'
-    except Exception as e:
-        bot_reply = f'Error: {e}'
+        # === Groq API Integration ===
+        try:
+            response = requests.post(
+                "https://api.groq.com/v1/chat/completions",
+                headers={"Authorization": "Bearer YOUR_GROQ_API_KEY"},
+                json={
+                    "model": "groq-llm", 
+                    "messages": [{"role": "user", "content": user_input}]
+                }
+            )
+            bot_response = response.json().get('choices', [{}])[0].get('message', {}).get('content', "Groq API did not return a response.")
+        except Exception as e:
+            bot_response = f"Error contacting Groq API: {str(e)}"
+        
+        # Append bot's response to history
+        st.session_state.history.append({'role': 'bot', 'content': bot_response})
 
-    # Store bot response
-    st.session_state['messages'].append(('Bot', bot_reply))
-
-# Display the conversation
-for sender, message in st.session_state['messages']:
-    if sender == 'You':
-        st.markdown(f'**You:** {message}')
-    else:
-        st.markdown(f'**Bot:** {message}')
+        # Clear the input field after sending
+        st.experimental_rerun()
