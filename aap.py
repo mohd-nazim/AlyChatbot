@@ -7,7 +7,7 @@ st.set_page_config(page_title='LLM Chatbot', layout='centered')
 st.title('💬 LLM Chatbot')
 
 # API Key input (you can replace this with a config file or env variable)
-api_key = st.text_input('Enter your Groq API Key:', type='password')
+api_key = st.text_input('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', type='password')
 
 # Groq API URL
 api_url = 'https://api.groq.com/v1/chat/completion'
