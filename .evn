@@ -1,7 +1,4 @@
 
-# .env file
-
-# Groq API credentials
 GROQ_API_URL=https://https://console.groq.com/keys
 GROQ_API_KEY=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
 
