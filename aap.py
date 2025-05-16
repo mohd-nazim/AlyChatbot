@@ -34,3 +34,9 @@ if user_input:
         st.markdown(f'**Bot:** {reply}')
     else:
         st.error('Failed to connect to the Groq API. Please check your credentials.')
+
+#new code
+
+
+print("GROQ_API_URL:", GROQ_API_URL)
+print("GROQ_API_KEY:", GROQ_API_KEY)
