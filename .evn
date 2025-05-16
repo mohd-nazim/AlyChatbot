@@ -1,4 +1,3 @@
 
-GROQ_API_URL=https://api.groq.com/openai/v1/chat/completions -s \
-GROQ_API_KEY=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
-
+GROQ_API_URL=https://api.groq.com/openai/v1/chat/completions
+GROQ_API_KEY=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
