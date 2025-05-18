@@ -11,7 +11,7 @@ load_dotenv(dotenv_path)
 GROQ_API_URL = os.getenv("GROQ_API_URL")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-st.title("Document Research & Theme Identification Chatbot")
+st.title("Document Research & Theme Identification Chatbot by Mohd Nazim")
 
 user_input = st.text_input("Ask something about your documents:")
 
