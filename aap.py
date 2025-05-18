@@ -43,9 +43,10 @@ if st.button("Send"):
 
                 if response.status_code == 200:
                     data = response.json()
-                    # ✅ Correct path to extract the message
                     reply = data["choices"][0]["message"]["content"]
-                    st.write("**Bot:**", reply)
+                    
+                    # ✅ Show response in proper format
+                    st.markdown(f"**Bot:** {reply}")
                 else:
                     st.error(f"Failed to connect: {response.status_code} - {response.text}")
 
